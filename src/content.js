@@ -14,7 +14,7 @@ const lowercaseWords = new Set([
 
 function processElement(el) {
 	const text = el.textContent.trim();
-	const fixed = titleCase(text, {smallWords: lowercaseWords});
+	const fixed = titleCase(text.toLowerCase(), {smallWords: lowercaseWords});
 
 	if (fixed !== text)
 		el.textContent = fixed;
