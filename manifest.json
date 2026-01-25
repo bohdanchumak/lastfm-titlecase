@@ -10,7 +10,7 @@
 				"https://last.fm/*"
 			],
 			"js": [
-				"content.js"
+				"dist/content.js"
 			]
 		}
 	]
