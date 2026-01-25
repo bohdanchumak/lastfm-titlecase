@@ -7,9 +7,14 @@ const TITLE_SELECTORS = [
 	'.chartlist-name a'
 ].join(', ');
 
+const lowercaseWords = new Set([
+	'a', 'aka', 'an', 'and', 'as', 'at', 'by', 'de', 'en', 'for', 'in', 
+	'nor', 'of', 'on', 'or', 'per', 'the', 'to', 'via', 'vs'
+]);
+
 function processElement(el) {
 	const text = el.textContent.trim();
-	const fixed = titleCase(text);
+	const fixed = titleCase(text, {smallWords: lowercaseWords});
 
 	if (fixed !== text)
 		el.textContent = fixed;
