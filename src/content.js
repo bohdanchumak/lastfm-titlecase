@@ -1,4 +1,4 @@
-import { titleCase } from 'title-case';
+import {titleCase} from 'title-case';
 
 const TITLE_SELECTORS = [
 	'.grid-items-item-aux-block',
@@ -12,17 +12,24 @@ const lowercaseWords = new Set([
 	'nor', 'of', 'on', 'or', 'per', 'the', 'to', 'via', 'vs'
 ]);
 
+const romanNumeralRegex = /\b(?=[MDCLXVI])M{0,3}(?:CM|CD|D?C{0,3})(?:XC|XL|L?X{0,3})(?:IX|IV|V?I{0,3})\b/gi;
 const cyrillicRegex = /[\u0400-\u04FF]/;
 
 function toSentenceCase(text) {
 	return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
+function uppercaseRomanNumerals(text) {
+	return text.replace(romanNumeralRegex, match => match.toUpperCase());
+}
+
 function processElement(el) {
 	const text = el.textContent.trim();
-	const fixed = cyrillicRegex.test(text)
+	let fixed = cyrillicRegex.test(text)
 		? toSentenceCase(text)
 		: titleCase(text.toLowerCase(), {smallWords: lowercaseWords});
+
+	fixed = uppercaseRomanNumerals(fixed);
 
 	if (fixed !== text)
 		el.textContent = fixed;
