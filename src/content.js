@@ -8,13 +8,21 @@ const TITLE_SELECTORS = [
 ].join(', ');
 
 const lowercaseWords = new Set([
-	'a', 'aka', 'an', 'and', 'as', 'at', 'by', 'de', 'en', 'for', 'in', 
+	'a', 'aka', 'an', 'and', 'as', 'at', 'by', 'de', 'en', 'for', 'in',
 	'nor', 'of', 'on', 'or', 'per', 'the', 'to', 'via', 'vs'
 ]);
 
+const cyrillicRegex = /[\u0400-\u04FF]/;
+
+function toSentenceCase(text) {
+	return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
 function processElement(el) {
 	const text = el.textContent.trim();
-	const fixed = titleCase(text.toLowerCase(), {smallWords: lowercaseWords});
+	const fixed = cyrillicRegex.test(text)
+		? toSentenceCase(text)
+		: titleCase(text.toLowerCase(), {smallWords: lowercaseWords});
 
 	if (fixed !== text)
 		el.textContent = fixed;
