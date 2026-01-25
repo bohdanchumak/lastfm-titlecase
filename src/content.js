@@ -1,7 +1,9 @@
 import { titleCase } from 'title-case';
 
 const TITLE_SELECTORS = [
+	'.grid-items-item-aux-block',
 	'h1.header-new-title',
+	'.link-block-target',
 	'.chartlist-name a'
 ].join(', ');
 
