@@ -10,8 +10,12 @@ const TITLE_SELECTORS = [
 ].join(', ');
 
 const lowercaseWords = new Set([
-	'a', 'aka', 'an', 'and', 'as', 'at', 'by', 'de', 'en', 'for', 'in',
-	'nor', 'of', 'on', 'or', 'per', 'the', 'to', 'via', 'vs'
+	'a', 'aka', 'an', 'and', 'as', 'at', 'by', 'de', 'en', 'feat', 'for',
+	'in', 'nor', 'of', 'on', 'or', 'per', 'the', 'to', 'via', 'vs'
+]);
+
+const uppercaseWords = new Set([
+	'dj', 'ep', 'lp', 'tv', 'uk', 'us', 'ufo', 'nyc', 'la', 'ok'
 ]);
 
 const romanNumeralRegex = /\b(?=[MDCLXVI])M{0,3}(?:CM|CD|D?C{0,3})(?:XC|XL|L?X{0,3})(?:IX|IV|V?I{0,3})\b/gi;
@@ -25,6 +29,12 @@ function uppercaseRomanNumerals(text) {
 	return text.replace(romanNumeralRegex, match => match.toUpperCase());
 }
 
+function applyUppercaseWords(text) {
+	return text.replace(/\b\w+\b/g, word =>
+		uppercaseWords.has(word.toLowerCase()) ? word.toUpperCase() : word
+	);
+}
+
 function processElement(el) {
 	const text = el.textContent.trim();
 	let fixed = cyrillicRegex.test(text)
@@ -32,6 +42,7 @@ function processElement(el) {
 		: titleCase(text.toLowerCase(), {smallWords: lowercaseWords});
 
 	fixed = uppercaseRomanNumerals(fixed);
+	fixed = applyUppercaseWords(fixed);
 
 	if (fixed !== text)
 		el.textContent = fixed;
