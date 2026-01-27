@@ -25,6 +25,10 @@ function toSentenceCase(text) {
 	return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
+function uppercaseAcronyms(text) {
+	return text.replace(/\b([a-z]\.){2,}/gi, match => match.toUpperCase());
+}
+
 function uppercaseRomanNumerals(text) {
 	return text.replace(romanNumeralRegex, (_, prefix, numeral) => prefix + numeral.toUpperCase());
 }
@@ -43,6 +47,7 @@ function processElement(el) {
 
 	fixed = uppercaseRomanNumerals(fixed);
 	fixed = applyUppercaseWords(fixed);
+	fixed = uppercaseAcronyms(fixed);
 
 	if (fixed !== text)
 		el.textContent = fixed;
