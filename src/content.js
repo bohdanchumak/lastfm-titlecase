@@ -15,10 +15,10 @@ const lowercaseWords = new Set([
 ]);
 
 const uppercaseWords = new Set([
-	'dj', 'ep', 'lp', 'tv', 'uk', 'us', 'ufo', 'nyc', 'la', 'ok'
+	'dj', 'ep', 'lp', 'tv', 'uk', 'us', 'ufo', 'nyc', 'ok'
 ]);
 
-const romanNumeralRegex = /\b(?=[MDCLXVI])M{0,3}(?:CM|CD|D?C{0,3})(?:XC|XL|L?X{0,3})(?:IX|IV|V?I{0,3})\b/gi;
+const romanNumeralRegex = /(^|[\s(\[{])((?=[IVX])X{0,3}(?:IX|IV|V?I{0,3}))(?=$|[\s)\]}.,:;!?])/gi;
 const sentenceCaseRegex = /[\u0400-\u04FFæøåäöőűłąęćńśźżčďěňřšťůžßñãõàâçèéêëîïôùûüœ]/i;
 
 function toSentenceCase(text) {
@@ -26,7 +26,7 @@ function toSentenceCase(text) {
 }
 
 function uppercaseRomanNumerals(text) {
-	return text.replace(romanNumeralRegex, match => match.toUpperCase());
+	return text.replace(romanNumeralRegex, (_, prefix, numeral) => prefix + numeral.toUpperCase());
 }
 
 function applyUppercaseWords(text) {
