@@ -19,7 +19,7 @@ const uppercaseWords = new Set([
 ]);
 
 const romanNumeralRegex = /\b(?=[MDCLXVI])M{0,3}(?:CM|CD|D?C{0,3})(?:XC|XL|L?X{0,3})(?:IX|IV|V?I{0,3})\b/gi;
-const cyrillicRegex = /[\u0400-\u04FF]/;
+const sentenceCaseRegex = /[\u0400-\u04FFæøåäöőűłąęćńśźżčďěňřšťůžßñãõàâçèéêëîïôùûüœ]/i;
 
 function toSentenceCase(text) {
 	return text.charAt(0).toUpperCase() + text.slice(1);
@@ -37,7 +37,7 @@ function applyUppercaseWords(text) {
 
 function processElement(el) {
 	const text = el.textContent.trim();
-	let fixed = cyrillicRegex.test(text)
+	let fixed = sentenceCaseRegex.test(text)
 		? toSentenceCase(text)
 		: titleCase(text.toLowerCase(), {smallWords: lowercaseWords});
 
