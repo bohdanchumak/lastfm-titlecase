@@ -43,6 +43,10 @@ function capitalizeAfterOpeningBrackets(text) {
 	return text.replace(/([(\[{])\s*(\w)/g, (_, bracket, letter) => bracket + letter.toUpperCase());
 }
 
+function capitalizeMusicalKeys(text) {
+	return text.replace(/\ba(?=(?:[\s-](?:sharp|flat))?[\s-](?:major|minor)\b)/gi, 'A');
+}
+
 function processElement(el) {
 	const text = el.textContent.trim();
 	let fixed = sentenceCaseRegex.test(text)
@@ -53,6 +57,7 @@ function processElement(el) {
 	fixed = applyUppercaseWords(fixed);
 	fixed = uppercaseAcronyms(fixed);
 	fixed = capitalizeAfterOpeningBrackets(fixed);
+	fixed = capitalizeMusicalKeys(fixed);
 
 	if (fixed !== text)
 		el.textContent = fixed;
