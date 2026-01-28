@@ -18,8 +18,8 @@ const uppercaseWords = new Set([
 	'dj', 'ep', 'lp', 'tv', 'uk', 'us', 'ufo', 'nyc', 'ok'
 ]);
 
-const romanNumeralRegex = /(^|[\s(\[{])((?=[IVX])X{0,3}(?:IX|IV|V?I{0,3}))(?=$|[\s)\]}.,:;!?])/gi;
 const sentenceCaseRegex = /[\u0400-\u04FFæøåäöőűłąęćńśźżčďěňřšťůžßñãõàâçèéêëîïôùûüœ]/i;
+const romanNumeralRegex = /(?<!\w)(?=[IVX])X{0,3}(?:IX|IV|V?I{0,3})(?!\w)/gi;
 
 function toSentenceCase(text) {
 	return text.charAt(0).toUpperCase() + text.slice(1);
@@ -30,7 +30,7 @@ function uppercaseAcronyms(text) {
 }
 
 function uppercaseRomanNumerals(text) {
-	return text.replace(romanNumeralRegex, (_, prefix, numeral) => prefix + numeral.toUpperCase());
+	return text.replace(romanNumeralRegex, match => match.toUpperCase());
 }
 
 function applyUppercaseWords(text) {
