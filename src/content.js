@@ -25,18 +25,18 @@ function toSentenceCase(text) {
 	return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
+function applyUppercaseWords(text) {
+	return text.replace(/\b\w+\b/g, word =>
+		uppercaseWords.has(word.toLowerCase()) ? word.toUpperCase() : word
+	);
+}
+
 function uppercaseAcronyms(text) {
 	return text.replace(/\b([a-z]\.){2,}/gi, match => match.toUpperCase());
 }
 
 function uppercaseRomanNumerals(text) {
 	return text.replace(romanNumeralRegex, match => match.toUpperCase());
-}
-
-function applyUppercaseWords(text) {
-	return text.replace(/\b\w+\b/g, word =>
-		uppercaseWords.has(word.toLowerCase()) ? word.toUpperCase() : word
-	);
 }
 
 function capitalizeAfterOpeningBrackets(text) {
@@ -47,17 +47,30 @@ function capitalizeMusicalKeys(text) {
 	return text.replace(/\ba(?=(?:[\s-](?:sharp|flat))?[\s-](?:major|minor)\b)/gi, 'A');
 }
 
+const commonProcessors = [
+	uppercaseRomanNumerals,
+	applyUppercaseWords,
+	uppercaseAcronyms
+];
+
+const titleCaseProcessors = [
+	capitalizeAfterOpeningBrackets,
+	capitalizeMusicalKeys
+];
+
 function processElement(el) {
 	const text = el.textContent.trim();
-	let fixed = sentenceCaseRegex.test(text)
+	const isSentenceCase = sentenceCaseRegex.test(text);
+
+	let fixed = isSentenceCase
 		? toSentenceCase(text)
 		: titleCase(text.toLowerCase(), {smallWords: lowercaseWords});
 
-	fixed = uppercaseRomanNumerals(fixed);
-	fixed = applyUppercaseWords(fixed);
-	fixed = uppercaseAcronyms(fixed);
-	fixed = capitalizeAfterOpeningBrackets(fixed);
-	fixed = capitalizeMusicalKeys(fixed);
+	const processors = isSentenceCase
+		? commonProcessors
+		: [...commonProcessors, ...titleCaseProcessors];
+
+	fixed = processors.reduce((result, fn) => fn(result), fixed);
 
 	if (fixed !== text)
 		el.textContent = fixed;
