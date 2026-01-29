@@ -1,6 +1,14 @@
 {
 	"manifest_version": 3,
 	"name": "Last.fm Title Case",
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "lastfm-titlecase@bohdanchumak.github.io",
+			"data_collection_permissions": {
+				"required": ["none"]
+			}
+		}
+	},
 	"version": "1.0.0",
 	"description": "Fixes song, album, and artist name casing on Last.fm",
 	"icons": {

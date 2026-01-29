@@ -15,13 +15,33 @@ Last.fm displays track, album, and artist names/titles exactly as they were scro
 - uppercases Roman numerals (I, II, III, IV, etc.) and musical keys (A Flat Major, etc.)
 - works on dynamically loaded content
 
-## Installation
+## Building from Source
 
-### From Source
+### Requirements
 
-1. Clone this repository
-2. Run `npm install`
-3. Run `npm run build`
-4. Load the extension in your browser:
+- **OS:** Windows, macOS, or Linux
+- **Node.js:** v18.0.0 or higher
+- **npm:** v9.0.0 or higher (included with Node.js)
+
+### Build Instructions
+
+1. Clone this repository:
+   ```
+   git clone https://github.com/bohdanchumak/lastfm-titlecase.git
+   cd lastfm-titlecase
+   ```
+2. Install dependencies:
+   ```
+   npm install
+   ```
+3. Build the extension:
+   ```
+   npm run build
+   ```
+
+This runs esbuild to bundle `src/content.js` with its dependencies into `dist/content.js`.
+
+### Loading the Extension
+
 - **Chrome/Edge:** Go to `chrome://extensions` or `edge://extensions`, enable "Developer mode", click "Load unpacked", and select the project folder
 - **Firefox:** Go to `about:debugging#/runtime/this-firefox`, click "Load Temporary Add-on", and select `manifest.json`
