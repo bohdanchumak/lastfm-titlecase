@@ -8,5 +8,29 @@
 </head>
 <body>
 	<h1>Last.fm Title Case Configuration</h1>
+
+	<div class="section lowercase">
+		<h2>Lowercase Words</h2>
+		<p>These words will remain lowercase in titles (except at the start or at the end):</p>
+		<div class="chips-container"></div>
+		<div class="add-form">
+			<input type="text" id="lowercase-input" placeholder="Add word...">
+			<button type="button" id="lowercase-add">Add</button>
+		</div>
+	</div>
+
+	<div class="section uppercase">
+		<h2>Uppercase Words</h2>
+		<p>These words will be fully capitalized:</p>
+		<div class="chips-container"></div>
+		<div class="add-form">
+			<input type="text" id="uppercase-input" placeholder="Add word...">
+			<button type="button" id="uppercase-add">Add</button>
+		</div>
+	</div>
+
+	<div class="status">Saved</div>
+
+	<script src="../dist/config.js"></script>
 </body>
 </html>

@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "content.js",
 	"scripts": {
-		"build": "esbuild src/content.js --bundle --outfile=dist/content.js --format=iife"
+		"build": "esbuild src/content.js src/config.js --bundle --outdir=dist --format=iife"
 	},
 	"repository": {
 		"type": "git",

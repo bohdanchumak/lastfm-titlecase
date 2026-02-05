@@ -1,4 +1,7 @@
 import {titleCase} from 'title-case';
+import {DEFAULT_LOWERCASE, DEFAULT_UPPERCASE} from './defaults.js';
+
+const storage = typeof browser !== 'undefined' ? browser.storage : chrome.storage;
 
 const TITLE_SELECTORS = [
 	'.grid-items-item-aux-block',
@@ -9,14 +12,18 @@ const TITLE_SELECTORS = [
 	'.chartlist-name a'
 ].join(', ');
 
-const lowercaseWords = new Set([
-	'a', 'aka', 'an', 'and', 'as', 'at', 'by', 'de', 'en', 'feat', 'for',
-	'in', 'nor', 'of', 'on', 'or', 'per', 'the', 'to', 'via', 'vs'
-]);
+let lowercaseWords = new Set(DEFAULT_LOWERCASE);
+let uppercaseWords = new Set(DEFAULT_UPPERCASE);
 
-const uppercaseWords = new Set([
-	'dj', 'ep', 'lp', 'tv', 'uk', 'us', 'ufo', 'nyc', 'ok'
-]);
+async function loadSettings() {
+	return new Promise((resolve) => {
+		storage.sync.get(['lowercaseWords', 'uppercaseWords'], (result) => {
+			if (result.lowercaseWords) lowercaseWords = new Set(result.lowercaseWords);
+			if (result.uppercaseWords) uppercaseWords = new Set(result.uppercaseWords);
+			resolve();
+		});
+	});
+}
 
 const sentenceCaseRegex = /[\u0400-\u04FFæøåäöőűłąęćńśźżčďěňřšťůžßñãõàâçèéêëîïôùûüœ]/i;
 const romanNumeralRegex = /(?<!\w)(?=[IVX])X{0,3}(?:IX|IV|V?I{0,3})(?!\w)/gi;
@@ -76,18 +83,22 @@ function processElement(el) {
 		el.textContent = fixed;
 }
 
-document.querySelectorAll(TITLE_SELECTORS).forEach(processElement);
+(async () => {
+	await loadSettings();
 
-new MutationObserver((mutations) => {
-	for (const mutation of mutations) {
-		for (const node of mutation.addedNodes) {
-			if (node.nodeType !== Node.ELEMENT_NODE)
-				continue;
+	document.querySelectorAll(TITLE_SELECTORS).forEach(processElement);
 
-			if (node.matches?.(TITLE_SELECTORS))
-				processElement(node);
+	new MutationObserver((mutations) => {
+		for (const mutation of mutations) {
+			for (const node of mutation.addedNodes) {
+				if (node.nodeType !== Node.ELEMENT_NODE)
+					continue;
 
-			node.querySelectorAll?.(TITLE_SELECTORS).forEach(processElement);
+				if (node.matches?.(TITLE_SELECTORS))
+					processElement(node);
+
+				node.querySelectorAll?.(TITLE_SELECTORS).forEach(processElement);
+			}
 		}
-	}
-}).observe(document.body, { childList: true, subtree: true });
+	}).observe(document.body, { childList: true, subtree: true });
+})();
