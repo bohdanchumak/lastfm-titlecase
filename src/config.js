@@ -24,8 +24,12 @@ function saveToStorage() {
 		lowercaseWords: state.lowercaseWords,
 		uppercaseWords: state.uppercaseWords
 	}, () => {
+		saveButton.textContent = 'Saved';
 		saveButton.classList.add('saved');
-		setTimeout(() => saveButton.classList.remove('saved'), 2000);
+		setTimeout(() => {
+			saveButton.textContent = 'Save';
+			saveButton.classList.remove('saved');
+		}, 1500);
 	});
 }
 

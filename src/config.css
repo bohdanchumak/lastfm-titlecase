@@ -77,6 +77,21 @@ h1 {
 	}
 }
 
+button {
+	font-size: 0.9rem;
+	font-weight: bold;
+	border: none;
+	border-radius: 4px;
+	padding: 8px 16px;
+	background: var(--color-accent);
+	color: #fff;
+	cursor: pointer;
+
+	&:hover {
+		background: var(--color-accent-hover);
+	}
+}
+
 .add-form {
 	display: flex;
 	gap: 8px;
@@ -93,50 +108,16 @@ h1 {
 			border-color: var(--color-accent);
 		}
 	}
-
-	& button {
-		font-size: 0.9rem;
-		font-weight: bold;
-		border: none;
-		border-radius: 4px;
-		padding: 8px 16px;
-		background: var(--color-accent);
-		color: #fff;
-		cursor: pointer;
-
-		&:hover {
-			background: var(--color-accent-hover);
-		}
-	}
 }
 
 .save-button {
 	display: block;
 	margin-left: auto;
+	min-width: 5.5em;
 	padding: 10px 16px;
-	font-size: 0.9rem;
-	font-weight: bold;
-	border: none;
-	border-radius: 4px;
-	background: var(--color-accent);
-	color: #fff;
-	cursor: pointer;
 	transition: background 0.2s;
-
-	&::after {
-		content: ' \2714';
-		visibility: hidden;
-	}
-
-	&:hover {
-		background: var(--color-accent-hover);
-	}
 
 	&.saved {
 		background: #2e7d32;
-
-		&::after {
-			visibility: visible;
-		}
 	}
 }
