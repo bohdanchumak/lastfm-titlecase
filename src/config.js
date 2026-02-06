@@ -15,8 +15,11 @@ let state = {
 	capitalizedWords: []
 };
 
-function setState(updates) {
+function setState(updates, dirty = true) {
 	state = { ...state, ...updates };
+
+	if (dirty)
+		saveButton.classList.add('dirty');
 
 	render();
 }
@@ -27,6 +30,7 @@ function saveToStorage() {
 		uppercaseWords: state.uppercaseWords,
 		capitalizedWords: state.capitalizedWords
 	}, () => {
+		saveButton.classList.remove('dirty');
 		saveButton.textContent = 'Saved';
 		saveButton.classList.add('saved');
 		setTimeout(() => {
@@ -43,7 +47,7 @@ function loadFromStorage() {
 				lowercaseWords: result.lowercaseWords || [...DEFAULT_LOWERCASE],
 				uppercaseWords: result.uppercaseWords || [...DEFAULT_UPPERCASE],
 				capitalizedWords: result.capitalizedWords || []
-			});
+			}, false);
 			resolve();
 		});
 	});

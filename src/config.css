@@ -115,7 +115,18 @@ button {
 	margin-left: auto;
 	min-width: 5.5em;
 	padding: 10px 16px;
+	background: #999;
 	transition: background 0.2s;
+	pointer-events: none;
+
+	&.dirty {
+		pointer-events: auto;
+		background: var(--color-accent);
+
+		&:hover {
+			background: var(--color-accent-hover);
+		}
+	}
 
 	&.saved {
 		background: #2e7d32;
