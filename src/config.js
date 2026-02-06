@@ -11,21 +11,22 @@ const lowercaseSection = document.querySelector('.section.lowercase');
 const uppercaseSection = document.querySelector('.section.uppercase');
 const lowercaseInput = document.getElementById('lowercase-input');
 const uppercaseInput = document.getElementById('uppercase-input');
-const statusEl = document.querySelector('.status');
+const saveButton = document.getElementById('save-button');
 
-function setState(updates, shouldSave = true) {
+function setState(updates) {
 	state = { ...state, ...updates };
 
 	render();
-
-	if (shouldSave) saveToStorage();
 }
 
 function saveToStorage() {
 	storage.sync.set({
 		lowercaseWords: state.lowercaseWords,
 		uppercaseWords: state.uppercaseWords
-	}, () => showStatus());
+	}, () => {
+		saveButton.classList.add('saved');
+		setTimeout(() => saveButton.classList.remove('saved'), 2000);
+	});
 }
 
 function loadFromStorage() {
@@ -34,7 +35,7 @@ function loadFromStorage() {
 			setState({
 				lowercaseWords: result.lowercaseWords || [...DEFAULT_LOWERCASE],
 				uppercaseWords: result.uppercaseWords || [...DEFAULT_UPPERCASE]
-			}, false);
+			});
 			resolve();
 		});
 	});
@@ -80,12 +81,7 @@ function createChip(word, onRemove) {
 	return chip;
 }
 
-function showStatus(message = 'Saved') {
-	statusEl.textContent = message;
-	statusEl.classList.add('visible');
-
-	setTimeout(() => statusEl.classList.remove('visible'), 1500);
-}
+saveButton.addEventListener('click', saveToStorage);
 
 [
 	{ type: 'lowercase', input: lowercaseInput, buttonId: 'lowercase-add' },
