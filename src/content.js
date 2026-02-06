@@ -59,10 +59,15 @@ function capitalizeMusicalKeys(text) {
 	return text.replace(/\ba(?=(?:[\s-](?:sharp|flat))?[\s-](?:major|minor)\b)/gi, 'A');
 }
 
+function capitalizeAfterDot(text) {
+	return text.replace(/\.\s+(\p{L})/gu, (match, letter) => match.slice(0, -1) + letter.toUpperCase());
+}
+
 const commonProcessors = [
 	uppercaseRomanNumerals,
 	applyWordOverrides,
-	uppercaseAcronyms
+	uppercaseAcronyms,
+	capitalizeAfterDot
 ];
 
 const titleCaseProcessors = [
