@@ -3,13 +3,16 @@ import {DEFAULT_LOWERCASE, DEFAULT_UPPERCASE} from './defaults.js';
 const storage = typeof browser !== 'undefined' ? browser.storage : chrome.storage;
 const lowercaseSection = document.querySelector('.section.lowercase');
 const uppercaseSection = document.querySelector('.section.uppercase');
+const capitalizedSection = document.querySelector('.section.capitalized');
 const lowercaseInput = document.getElementById('lowercase-input');
 const uppercaseInput = document.getElementById('uppercase-input');
+const capitalizedInput = document.getElementById('capitalized-input');
 const saveButton = document.getElementById('save-button');
 
 let state = {
 	lowercaseWords: [...DEFAULT_LOWERCASE],
-	uppercaseWords: [...DEFAULT_UPPERCASE]
+	uppercaseWords: [...DEFAULT_UPPERCASE],
+	capitalizedWords: []
 };
 
 function setState(updates) {
@@ -21,7 +24,8 @@ function setState(updates) {
 function saveToStorage() {
 	storage.sync.set({
 		lowercaseWords: state.lowercaseWords,
-		uppercaseWords: state.uppercaseWords
+		uppercaseWords: state.uppercaseWords,
+		capitalizedWords: state.capitalizedWords
 	}, () => {
 		saveButton.textContent = 'Saved';
 		saveButton.classList.add('saved');
@@ -34,10 +38,11 @@ function saveToStorage() {
 
 function loadFromStorage() {
 	return new Promise((resolve) => {
-		storage.sync.get(['lowercaseWords', 'uppercaseWords'], (result) => {
+		storage.sync.get(['lowercaseWords', 'uppercaseWords', 'capitalizedWords'], (result) => {
 			setState({
 				lowercaseWords: result.lowercaseWords || [...DEFAULT_LOWERCASE],
-				uppercaseWords: result.uppercaseWords || [...DEFAULT_UPPERCASE]
+				uppercaseWords: result.uppercaseWords || [...DEFAULT_UPPERCASE],
+				capitalizedWords: result.capitalizedWords || []
 			});
 			resolve();
 		});
@@ -82,6 +87,7 @@ function removeWord(type, word) {
 function render() {
 	renderSection(lowercaseSection, state.lowercaseWords, 'lowercase');
 	renderSection(uppercaseSection, state.uppercaseWords, 'uppercase');
+	renderSection(capitalizedSection, state.capitalizedWords, 'capitalized');
 }
 
 function renderSection(section, words, type) {
@@ -109,7 +115,8 @@ saveButton.addEventListener('click', saveToStorage);
 
 [
 	{ type: 'lowercase', input: lowercaseInput, buttonId: 'lowercase-add' },
-	{ type: 'uppercase', input: uppercaseInput, buttonId: 'uppercase-add' }
+	{ type: 'uppercase', input: uppercaseInput, buttonId: 'uppercase-add' },
+	{ type: 'capitalized', input: capitalizedInput, buttonId: 'capitalized-add' }
 ].forEach(({ type, input, buttonId }) => {
 	const submit = () => {
 		addWord(type, input.value);

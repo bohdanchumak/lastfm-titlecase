@@ -14,12 +14,14 @@ const TITLE_SELECTORS = [
 
 let lowercaseWords = new Set(DEFAULT_LOWERCASE);
 let uppercaseWords = new Set(DEFAULT_UPPERCASE);
+let capitalizedWords = new Set();
 
 async function loadSettings() {
 	return new Promise((resolve) => {
-		storage.sync.get(['lowercaseWords', 'uppercaseWords'], (result) => {
+		storage.sync.get(['lowercaseWords', 'uppercaseWords', 'capitalizedWords'], (result) => {
 			if (result.lowercaseWords) lowercaseWords = new Set(result.lowercaseWords);
 			if (result.uppercaseWords) uppercaseWords = new Set(result.uppercaseWords);
+			if (result.capitalizedWords) capitalizedWords = new Set(result.capitalizedWords);
 			resolve();
 		});
 	});
@@ -32,10 +34,13 @@ function toSentenceCase(text) {
 	return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
-function applyUppercaseWords(text) {
-	return text.replace(/\b\w+\b/g, word =>
-		uppercaseWords.has(word.toLowerCase()) ? word.toUpperCase() : word
-	);
+function applyWordOverrides(text) {
+	return text.replace(/\p{L}+/gu, word => {
+		const lower = word.toLowerCase();
+		if (uppercaseWords.has(lower)) return word.toUpperCase();
+		if (capitalizedWords.has(lower)) return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+		return word;
+	});
 }
 
 function uppercaseAcronyms(text) {
@@ -56,7 +61,7 @@ function capitalizeMusicalKeys(text) {
 
 const commonProcessors = [
 	uppercaseRomanNumerals,
-	applyUppercaseWords,
+	applyWordOverrides,
 	uppercaseAcronyms
 ];
 
