@@ -1,17 +1,16 @@
 import {DEFAULT_LOWERCASE, DEFAULT_UPPERCASE} from './defaults.js';
 
 const storage = typeof browser !== 'undefined' ? browser.storage : chrome.storage;
-
-let state = {
-	lowercaseWords: [...DEFAULT_LOWERCASE],
-	uppercaseWords: [...DEFAULT_UPPERCASE]
-};
-
 const lowercaseSection = document.querySelector('.section.lowercase');
 const uppercaseSection = document.querySelector('.section.uppercase');
 const lowercaseInput = document.getElementById('lowercase-input');
 const uppercaseInput = document.getElementById('uppercase-input');
 const saveButton = document.getElementById('save-button');
+
+let state = {
+	lowercaseWords: [...DEFAULT_LOWERCASE],
+	uppercaseWords: [...DEFAULT_UPPERCASE]
+};
 
 function setState(updates) {
 	state = { ...state, ...updates };
@@ -45,11 +44,32 @@ function loadFromStorage() {
 	});
 }
 
+function validateWord(word) {
+	if (word.length > 50) 
+		return 'Word is too long (max 50 characters)';
+
+	if (/:\/\//.test(word) || /^www\./i.test(word))
+		return 'URLs are not allowed';
+
+	if (/<[^>]*>/.test(word))
+		return 'HTML tags are not allowed';
+
+	return null;
+}
+
 function addWord(type, word) {
 	const key = type + 'Words';
 	const normalized = word.trim().toLowerCase();
 
-	if (normalized && !state[key].includes(normalized))
+	if (!normalized)
+		return;
+
+	const error = validateWord(normalized);
+
+	if (error)
+		return alert(error);
+
+	if (!state[key].includes(normalized))
 		setState({ [key]: [...state[key], normalized] });
 }
 
