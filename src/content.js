@@ -31,7 +31,7 @@ const sentenceCaseRegex = /[\u0400-\u04FFæøåäöőűłąęćńśźżčďěň�
 const romanNumeralRegex = /(?<!\w)(?=[IVX])X{0,3}(?:IX|IV|V?I{0,3})(?!\w)/gi;
 
 function toSentenceCase(text) {
-	return text.charAt(0).toUpperCase() + text.slice(1);
+	return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
 }
 
 function applyWordOverrides(text) {
