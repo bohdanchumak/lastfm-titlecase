@@ -13,7 +13,16 @@ Last.fm displays track, album, and artist names/titles exactly as they were scro
 - converts text to title case with smart handling of common words (a, the, of, etc.)
 - detects non-English text and applies sentence case instead
 - uppercases Roman numerals (I, II, III, IV, etc.) and musical keys (A Flat Major, etc.)
+- capitalizes words after dots
 - works on dynamically loaded content
+
+## Configuration
+
+Click the extension icon to open the configuration page. There are three word lists you can customize:
+
+- **Lowercase Words** — words that remain lowercase in titles (except at the start or end), e.g., "a", "the", "of"
+- **Uppercase Words** — words that are always fully capitalized, e.g., "DJ", "EP", "UK"
+- **Capitalized Words** — words that always have the first letter capitalized (useful for non-English titles where sentence case is applied)
 
 ## Building from Source
 
