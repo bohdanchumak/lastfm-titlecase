@@ -1,4 +1,3 @@
-import {titleCase} from 'title-case';
 import {DEFAULT_LOWERCASE, DEFAULT_UPPERCASE} from './defaults.js';
 
 const storage = typeof browser !== 'undefined' ? browser.storage : chrome.storage;
@@ -29,6 +28,17 @@ async function loadSettings() {
 
 const sentenceCaseRegex = /[\u0400-\u04FFæøåäöőűłąęćńśźżčďěňřšťůžßñãõàâçèéêëîïôùûüœ]/i;
 const romanNumeralRegex = /(?<!\w)(?=[IVX])X{0,3}(?:IX|IV|V?I{0,3})(?!\w)/gi;
+
+function toTitleCase(text, smallWords) {
+	const words = text.split(/\s+/);
+
+	return words.map((word, i) => {
+		if (i > 0 && i < words.length - 1 && smallWords.has(word.toLowerCase()))
+			return word.toLowerCase();
+
+		return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+	}).join(' ');
+}
 
 function toSentenceCase(text) {
 	return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
@@ -81,7 +91,7 @@ function processElement(el) {
 
 	let fixed = isSentenceCase
 		? toSentenceCase(text)
-		: titleCase(text.toLowerCase(), {smallWords: lowercaseWords});
+		: toTitleCase(text, lowercaseWords);
 
 	const processors = isSentenceCase
 		? commonProcessors
