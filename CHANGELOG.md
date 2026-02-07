@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.1.1
+
+> February 07, 2026
+
+### Fixed
+- Mozilla Firefox compatibility
+
+### Changed
+- Replaced third-party title-case library with a built-in implementation
+
 ## 1.1.0
 
 > February 06, 2026
