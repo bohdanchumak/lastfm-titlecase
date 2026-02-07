@@ -8,17 +8,24 @@ Last.fm displays track, album, and artist names/titles exactly as they were scro
 |--------|-------|
 | ![Before](screenshots/before.png) | ![After](screenshots/after.png) |
 
-## Features
+The extension consists of two parts: automatic corrections that work out of the box, and a configuration page that lets you fine-tune the results.
 
-- converts text to title case with smart handling of common words (a, the, of, etc.)
-- detects non-English text and applies sentence case instead
-- uppercases Roman numerals (I, II, III, IV, etc.) and musical keys (A Flat Major, etc.)
-- capitalizes words after dots
-- works on dynamically loaded content
+## Automatic Corrections
+
+The extension automatically applies the following rules to all song, album, and artist names:
+
+- converts English text to title case with smart handling of common words (a, the, of, etc.)
+- converts non-English text to sentence case (first letter uppercase, rest lowercase)
+- uppercases Roman numerals (I, II, III, IV, etc.)
+- uppercases letter-dot acronyms (U.S.A., etc.)
+- capitalizes musical keys (A Flat Major, A Sharp Minor, etc.)
+- capitalizes the first letter after opening brackets and dots
 
 ## Configuration
 
-Click the extension icon to open the configuration page. There are three word lists you can customize:
+Click the extension icon to open the configuration page. There are three word lists you can customize to fine-tune the automatic corrections:
+
+![Configuration](screenshots/config.png)
 
 - **Lowercase Words** — words that remain lowercase in titles (except at the start or end), e.g., "a", "the", "of"
 - **Uppercase Words** — words that are always fully capitalized, e.g., "DJ", "EP", "UK"
@@ -48,7 +55,7 @@ Click the extension icon to open the configuration page. There are three word li
    npm run build
    ```
 
-This runs esbuild to bundle `src/content.js` with its dependencies into `dist/content.js`.
+This runs esbuild to bundle source files with their dependencies into the `dist/` directory.
 
 ### Loading the Extension
 
