@@ -35,8 +35,33 @@ h1 {
 		border-left-color: var(--color-accent);
 	}
 
+	& summary {
+		display: flex;
+		align-items: center;
+		cursor: pointer;
+
+		&::after {
+			content: '';
+			width: 8px;
+			height: 8px;
+			margin-left: auto;
+			border-right: 2px solid var(--color-text-muted);
+			border-bottom: 2px solid var(--color-text-muted);
+			transform: translateY(-2px) rotate(45deg);
+			transition: transform 0.2s;
+		}
+	}
+
+	&[open] > summary {
+		margin-bottom: 0.5rem;
+
+		&::after {
+			transform: translateY(2px) rotate(-135deg);
+		}
+	}
+
 	& h2 {
-		margin: 0 0 0.5rem 0;
+		margin: 0;
 		color: var(--color-text);
 	}
 

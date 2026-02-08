@@ -9,38 +9,38 @@
 <body>
 	<h1>Last.fm Title Case Configuration</h1>
 
-	<div class="section lowercase">
-		<h2>Lowercase Words</h2>
+	<details class="section lowercase">
+		<summary><h2>Lowercase Words</h2></summary>
 		<p>These words will remain lowercase in titles (except at the start or at the end):</p>
 		<div class="chips-container"></div>
 		<div class="add-form">
 			<input type="text" id="lowercase-input" placeholder="Add word...">
 			<button type="button" id="lowercase-add">Add</button>
 		</div>
-	</div>
+	</details>
 
-	<div class="section uppercase">
-		<h2>Uppercase Words</h2>
+	<details class="section uppercase">
+		<summary><h2>Uppercase Words</h2></summary>
 		<p>These words will be fully capitalized:</p>
 		<div class="chips-container"></div>
 		<div class="add-form">
 			<input type="text" id="uppercase-input" placeholder="Add word...">
 			<button type="button" id="uppercase-add">Add</button>
 		</div>
-	</div>
+	</details>
 
-	<div class="section capitalized">
-		<h2>Capitalized Words</h2>
+	<details class="section capitalized">
+		<summary><h2>Capitalized Words</h2></summary>
 		<p>These words will always have the first letter capitalized:</p>
 		<div class="chips-container"></div>
 		<div class="add-form">
 			<input type="text" id="capitalized-input" placeholder="Add word...">
 			<button type="button" id="capitalized-add">Add</button>
 		</div>
-	</div>
+	</details>
 
-	<div class="section replacements">
-		<h2>Title Replacements</h2>
+	<details class="section replacements">
+		<summary><h2>Replacements</h2></summary>
 		<p>Single words are replaced wherever they appear. <br>Multi-word phrases replace the entire title.</p>
 		<div class="replacements-list"></div>
 		<div class="add-form">
@@ -48,7 +48,7 @@
 			<input type="text" id="replacement-to" placeholder="Fixed title...">
 			<button type="button" id="replacement-add">Add</button>
 		</div>
-	</div>
+	</details>
 
 	<button type="button" class="save-button" id="save-button">Save</button>
 
