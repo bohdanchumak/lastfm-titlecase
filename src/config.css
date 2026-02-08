@@ -131,13 +131,15 @@ button {
 }
 
 .save-button {
-	display: block;
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
 	min-width: 5.5em;
-	margin-left: auto;
 	padding: 10px 16px;
 	background: #999;
-	pointer-events: none;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 	transition: background 0.2s;
+	pointer-events: none;
 
 	&.dirty {
 		background: var(--color-accent);
