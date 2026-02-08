@@ -19,11 +19,31 @@ let state = {
 	titleReplacements: []
 };
 
-function setState(updates, dirty = true) {
+let savedState = null;
+
+const sectionByKey = {
+	lowercaseWords: lowercaseSection,
+	uppercaseWords: uppercaseSection,
+	capitalizedWords: capitalizedSection,
+	titleReplacements: replacementsSection
+};
+
+function setState(updates) {
 	state = { ...state, ...updates };
 
-	if (dirty)
-		saveButton.classList.add('dirty');
+	if (savedState) {
+		let anyDirty = false;
+
+		for (const [key, section] of Object.entries(sectionByKey)) {
+			const dirty = JSON.stringify(state[key]) !== JSON.stringify(savedState[key]);
+			section.classList.toggle('dirty', dirty);
+
+			if (dirty)
+				anyDirty = true;
+		}
+
+		saveButton.classList.toggle('dirty', anyDirty);
+	}
 
 	render();
 }
@@ -35,6 +55,11 @@ function saveToStorage() {
 		capitalizedWords: state.capitalizedWords,
 		titleReplacements: state.titleReplacements
 	}, () => {
+		savedState = JSON.parse(JSON.stringify(state));
+
+		for (const section of Object.values(sectionByKey))
+			section.classList.remove('dirty');
+
 		saveButton.classList.remove('dirty');
 		saveButton.textContent = 'Saved';
 		saveButton.classList.add('saved');
@@ -53,7 +78,9 @@ function loadFromStorage() {
 				uppercaseWords: result.uppercaseWords || [...DEFAULT_UPPERCASE],
 				capitalizedWords: result.capitalizedWords || [],
 				titleReplacements: result.titleReplacements || []
-			}, false);
+			});
+
+			savedState = JSON.parse(JSON.stringify(state));
 			resolve();
 		});
 	});
