@@ -14,13 +14,23 @@ const TITLE_SELECTORS = [
 let lowercaseWords = new Set(DEFAULT_LOWERCASE);
 let uppercaseWords = new Set(DEFAULT_UPPERCASE);
 let capitalizedWords = new Set();
+let titleReplacements = [];
 
 async function loadSettings() {
 	return new Promise((resolve) => {
-		storage.sync.get(['lowercaseWords', 'uppercaseWords', 'capitalizedWords'], (result) => {
-			if (result.lowercaseWords) lowercaseWords = new Set(result.lowercaseWords);
-			if (result.uppercaseWords) uppercaseWords = new Set(result.uppercaseWords);
-			if (result.capitalizedWords) capitalizedWords = new Set(result.capitalizedWords);
+		storage.sync.get(['lowercaseWords', 'uppercaseWords', 'capitalizedWords', 'titleReplacements'], (result) => {
+			if (result.lowercaseWords)
+				lowercaseWords = new Set(result.lowercaseWords);
+
+			if (result.uppercaseWords)
+				uppercaseWords = new Set(result.uppercaseWords);
+
+			if (result.capitalizedWords)
+				capitalizedWords = new Set(result.capitalizedWords);
+
+			if (result.titleReplacements)
+				titleReplacements = result.titleReplacements;
+
 			resolve();
 		});
 	});
@@ -47,8 +57,17 @@ function toSentenceCase(text) {
 function applyWordOverrides(text) {
 	return text.replace(/\p{L}+/gu, word => {
 		const lower = word.toLowerCase();
-		if (uppercaseWords.has(lower)) return word.toUpperCase();
-		if (capitalizedWords.has(lower)) return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+		const replacement = titleReplacements.find(r => !r.from.includes(' ') && r.from.toLowerCase() === lower);
+
+		if (replacement)
+			return replacement.to;
+
+		if (uppercaseWords.has(lower))
+			return word.toUpperCase();
+
+		if (capitalizedWords.has(lower))
+			return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+
 		return word;
 	});
 }
@@ -87,6 +106,15 @@ const titleCaseProcessors = [
 
 function processElement(el) {
 	const text = el.textContent.trim();
+	const replacement = titleReplacements.find(r => r.from.includes(' ') && r.from.toLowerCase() === text.toLowerCase());
+
+	if (replacement) {
+		if (replacement.to !== text)
+			el.textContent = replacement.to;
+
+		return;
+	}
+
 	const isSentenceCase = sentenceCaseRegex.test(text);
 
 	let fixed = isSentenceCase

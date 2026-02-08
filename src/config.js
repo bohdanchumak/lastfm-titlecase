@@ -4,15 +4,19 @@ const storage = typeof browser !== 'undefined' ? browser.storage : chrome.storag
 const lowercaseSection = document.querySelector('.section.lowercase');
 const uppercaseSection = document.querySelector('.section.uppercase');
 const capitalizedSection = document.querySelector('.section.capitalized');
+const replacementsSection = document.querySelector('.section.replacements');
 const lowercaseInput = document.getElementById('lowercase-input');
 const uppercaseInput = document.getElementById('uppercase-input');
 const capitalizedInput = document.getElementById('capitalized-input');
+const replacementFromInput = document.getElementById('replacement-from');
+const replacementToInput = document.getElementById('replacement-to');
 const saveButton = document.getElementById('save-button');
 
 let state = {
 	lowercaseWords: [...DEFAULT_LOWERCASE],
 	uppercaseWords: [...DEFAULT_UPPERCASE],
-	capitalizedWords: []
+	capitalizedWords: [],
+	titleReplacements: []
 };
 
 function setState(updates, dirty = true) {
@@ -28,7 +32,8 @@ function saveToStorage() {
 	storage.sync.set({
 		lowercaseWords: state.lowercaseWords,
 		uppercaseWords: state.uppercaseWords,
-		capitalizedWords: state.capitalizedWords
+		capitalizedWords: state.capitalizedWords,
+		titleReplacements: state.titleReplacements
 	}, () => {
 		saveButton.classList.remove('dirty');
 		saveButton.textContent = 'Saved';
@@ -42,11 +47,12 @@ function saveToStorage() {
 
 function loadFromStorage() {
 	return new Promise((resolve) => {
-		storage.sync.get(['lowercaseWords', 'uppercaseWords', 'capitalizedWords'], (result) => {
+		storage.sync.get(['lowercaseWords', 'uppercaseWords', 'capitalizedWords', 'titleReplacements'], (result) => {
 			setState({
 				lowercaseWords: result.lowercaseWords || [...DEFAULT_LOWERCASE],
 				uppercaseWords: result.uppercaseWords || [...DEFAULT_UPPERCASE],
-				capitalizedWords: result.capitalizedWords || []
+				capitalizedWords: result.capitalizedWords || [],
+				titleReplacements: result.titleReplacements || []
 			}, false);
 			resolve();
 		});
@@ -88,10 +94,59 @@ function removeWord(type, word) {
 	setState({ [key]: state[key].filter(w => w !== word) });
 }
 
+function addReplacement(from, to) {
+	from = from.trim();
+	to = to.trim();
+
+	if (!from || !to)
+		return;
+
+	const fromError = validateWord(from);
+	const toError = validateWord(to);
+
+	if (fromError)
+		return alert(fromError);
+
+	if (toError)
+		return alert(toError);
+
+	if (state.titleReplacements.some(r => r.from.toLowerCase() === from.toLowerCase()))
+		return;
+
+	setState({ titleReplacements: [...state.titleReplacements, { from, to }] });
+}
+
+function removeReplacement(from) {
+	setState({ titleReplacements: state.titleReplacements.filter(r => r.from !== from) });
+}
+
+function renderReplacements() {
+	const container = replacementsSection.querySelector('.replacements-list');
+	container.innerHTML = '';
+
+	[...state.titleReplacements]
+		.sort((a, b) => a.from.localeCompare(b.from))
+		.forEach(({ from, to }) => {
+			const item = document.createElement('span');
+			item.className = 'replacement-item';
+			item.role = 'button';
+			item.ariaLabel = `Remove replacement ${from}`;
+
+			const arrow = document.createElement('span');
+			arrow.className = 'arrow';
+			arrow.textContent = '\u2192';
+
+			item.append(from + ' ', arrow, ' ' + to);
+			item.addEventListener('click', () => removeReplacement(from));
+			container.appendChild(item);
+		});
+}
+
 function render() {
 	renderSection(lowercaseSection, state.lowercaseWords, 'lowercase');
 	renderSection(uppercaseSection, state.uppercaseWords, 'uppercase');
 	renderSection(capitalizedSection, state.capitalizedWords, 'capitalized');
+	renderReplacements();
 }
 
 function renderSection(section, words, type) {
@@ -136,6 +191,22 @@ saveButton.addEventListener('click', saveToStorage);
 			submit();
 		}
 	});
+});
+
+const submitReplacement = () => {
+	addReplacement(replacementFromInput.value, replacementToInput.value);
+	replacementFromInput.value = '';
+	replacementToInput.value = '';
+	replacementFromInput.focus();
+};
+
+document.getElementById('replacement-add').addEventListener('click', submitReplacement);
+
+replacementToInput.addEventListener('keydown', (e) => {
+	if (e.key === 'Enter') {
+		e.preventDefault();
+		submitReplacement();
+	}
 });
 
 loadFromStorage();
