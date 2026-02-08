@@ -7,6 +7,7 @@ const TITLE_SELECTORS = [
 	'h1.header-new-title',
 	'h2.library-header-title',
 	'.link-block-target',
+	'.chartlist-artist a',
 	'.chartlist-album a',
 	'.chartlist-name a'
 ].join(', ');
