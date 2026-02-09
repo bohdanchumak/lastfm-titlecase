@@ -81,20 +81,14 @@ function uppercaseRomanNumerals(text) {
 	return text.replace(romanNumeralRegex, match => match.toUpperCase());
 }
 
-function capitalizeAfterHyphens(text) {
-	return text.replace(/-(\p{L})/gu, (_, letter) => '-' + letter.toUpperCase());
-}
+const capitalizeAfter = (pattern) => (text) =>
+	text.replace(pattern, (_, prefix, letter) => prefix + letter.toUpperCase());
 
-function capitalizeAfterOpeningBrackets(text) {
-	return text.replace(/([(\[{])\s*(\w)/g, (_, bracket, letter) => bracket + letter.toUpperCase());
-}
+const capitalizeAfterDot = capitalizeAfter(/(\.\s+)(\p{L})/gu);
+const capitalizeAfterPunctuation = capitalizeAfter(/(-|\/|[(\[{]\s*)(\p{L})/gu);
 
 function capitalizeMusicalKeys(text) {
 	return text.replace(/\ba(?=(?:[\s-](?:sharp|flat))?[\s-](?:major|minor)\b)/gi, 'A');
-}
-
-function capitalizeAfterDot(text) {
-	return text.replace(/\.\s+(\p{L})/gu, (match, letter) => match.slice(0, -1) + letter.toUpperCase());
 }
 
 const commonProcessors = [
@@ -105,8 +99,7 @@ const commonProcessors = [
 ];
 
 const titleCaseProcessors = [
-	capitalizeAfterHyphens,
-	capitalizeAfterOpeningBrackets,
+	capitalizeAfterPunctuation,
 	capitalizeMusicalKeys
 ];
 
