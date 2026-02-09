@@ -81,6 +81,10 @@ function uppercaseRomanNumerals(text) {
 	return text.replace(romanNumeralRegex, match => match.toUpperCase());
 }
 
+function capitalizeAfterHyphens(text) {
+	return text.replace(/-(\p{L})/gu, (_, letter) => '-' + letter.toUpperCase());
+}
+
 function capitalizeAfterOpeningBrackets(text) {
 	return text.replace(/([(\[{])\s*(\w)/g, (_, bracket, letter) => bracket + letter.toUpperCase());
 }
@@ -101,6 +105,7 @@ const commonProcessors = [
 ];
 
 const titleCaseProcessors = [
+	capitalizeAfterHyphens,
 	capitalizeAfterOpeningBrackets,
 	capitalizeMusicalKeys
 ];
