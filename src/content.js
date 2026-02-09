@@ -132,6 +132,18 @@ function processElement(el) {
 		el.textContent = fixed;
 }
 
+let lastRightClickedTitle = null;
+
+document.addEventListener('contextmenu', (e) => {
+	const titleEl = e.target.closest(TITLE_SELECTORS);
+	lastRightClickedTitle = titleEl ? titleEl.textContent.trim() : null;
+});
+
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+	if (msg.type === 'getRightClickedTitle')
+		sendResponse(lastRightClickedTitle);
+});
+
 (async () => {
 	await loadSettings();
 

@@ -16,7 +16,7 @@
 		"48": "icons/icon48.png",
 		"128": "icons/icon128.png"
 	},
-	"permissions": ["storage"],
+	"permissions": ["storage", "contextMenus"],
 	"action": {},
 	"background": {
 		"service_worker": "src/background.js",

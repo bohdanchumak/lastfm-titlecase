@@ -236,4 +236,12 @@ replacementToInput.addEventListener('keydown', (e) => {
 	}
 });
 
-loadFromStorage();
+loadFromStorage().then(() => {
+	const from = new URLSearchParams(location.search).get('from');
+
+	if (from) {
+		replacementFromInput.value = from;
+		replacementsSection.open = true;
+		replacementToInput.focus();
+	}
+});
