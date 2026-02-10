@@ -4,5 +4,5 @@ export const DEFAULT_LOWERCASE = [
 ];
 
 export const DEFAULT_UPPERCASE = [
-	'dj', 'ep', 'lp', 'tv', 'uk', 'us', 'ufo', 'nyc', 'ok'
+	'dj', 'ep', 'lp', 'tv', 'uk', 'usa', 'ufo', 'nyc', 'ok'
 ];
