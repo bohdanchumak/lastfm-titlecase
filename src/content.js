@@ -74,7 +74,7 @@ function applyWordOverrides(text) {
 }
 
 function uppercaseAcronyms(text) {
-	return text.replace(/\b([a-z]\.){2,}/gi, match => match.toUpperCase());
+	return text.replace(/\b(?:[a-z]\.){2,}[a-z]?(?![a-z])/gi, match => match.toUpperCase());
 }
 
 function uppercaseRomanNumerals(text) {
