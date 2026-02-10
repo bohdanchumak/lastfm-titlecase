@@ -38,7 +38,7 @@ async function loadSettings() {
 }
 
 const sentenceCaseRegex = /[\u0400-\u04FFæøåäöőűłąęćńśźżčďěňřšťůžßñãõàâçèéêëîïôùûüœ]/i;
-const romanNumeralRegex = /(?<!\w)(?=[IVX])X{0,3}(?:IX|IV|V?I{0,3})(?!\w)/gi;
+const romanNumeralRegex = /(?<!\p{L})(?=[IVX])X{0,3}(?:IX|IV|V?I{0,3})(?!\p{L})/giu;
 
 function toTitleCase(text, smallWords) {
 	const words = text.split(/\s+/);
