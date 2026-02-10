@@ -5,14 +5,17 @@ const lowercaseSection = document.querySelector('.section.lowercase');
 const uppercaseSection = document.querySelector('.section.uppercase');
 const capitalizedSection = document.querySelector('.section.capitalized');
 const replacementsSection = document.querySelector('.section.replacements');
+const settingsSection = document.querySelector('.section.settings');
 const lowercaseInput = document.getElementById('lowercase-input');
 const uppercaseInput = document.getElementById('uppercase-input');
 const capitalizedInput = document.getElementById('capitalized-input');
 const replacementFromInput = document.getElementById('replacement-from');
 const replacementToInput = document.getElementById('replacement-to');
+const sentenceCaseToggle = document.getElementById('sentence-case-toggle');
 const saveButton = document.getElementById('save-button');
 
 let state = {
+	sentenceCaseEnabled: true,
 	lowercaseWords: [...DEFAULT_LOWERCASE],
 	uppercaseWords: [...DEFAULT_UPPERCASE],
 	capitalizedWords: [],
@@ -22,6 +25,7 @@ let state = {
 let savedState = null;
 
 const sectionByKey = {
+	sentenceCaseEnabled: settingsSection,
 	lowercaseWords: lowercaseSection,
 	uppercaseWords: uppercaseSection,
 	capitalizedWords: capitalizedSection,
@@ -50,6 +54,7 @@ function setState(updates) {
 
 function saveToStorage() {
 	storage.sync.set({
+		sentenceCaseEnabled: state.sentenceCaseEnabled,
 		lowercaseWords: state.lowercaseWords,
 		uppercaseWords: state.uppercaseWords,
 		capitalizedWords: state.capitalizedWords,
@@ -72,8 +77,9 @@ function saveToStorage() {
 
 function loadFromStorage() {
 	return new Promise((resolve) => {
-		storage.sync.get(['lowercaseWords', 'uppercaseWords', 'capitalizedWords', 'titleReplacements'], (result) => {
+		storage.sync.get(['sentenceCaseEnabled', 'lowercaseWords', 'uppercaseWords', 'capitalizedWords', 'titleReplacements'], (result) => {
 			setState({
+				sentenceCaseEnabled: result.sentenceCaseEnabled !== undefined ? result.sentenceCaseEnabled : true,
 				lowercaseWords: result.lowercaseWords || [...DEFAULT_LOWERCASE],
 				uppercaseWords: result.uppercaseWords || [...DEFAULT_UPPERCASE],
 				capitalizedWords: result.capitalizedWords || [],
@@ -170,6 +176,7 @@ function renderReplacements() {
 }
 
 function render() {
+	sentenceCaseToggle.checked = state.sentenceCaseEnabled;
 	renderSection(lowercaseSection, state.lowercaseWords, 'lowercase');
 	renderSection(uppercaseSection, state.uppercaseWords, 'uppercase');
 	renderSection(capitalizedSection, state.capitalizedWords, 'capitalized');
@@ -198,6 +205,10 @@ function createChip(word, onRemove) {
 }
 
 saveButton.addEventListener('click', saveToStorage);
+
+sentenceCaseToggle.addEventListener('change', () => {
+	setState({ sentenceCaseEnabled: sentenceCaseToggle.checked });
+});
 
 [
 	{ type: 'lowercase', input: lowercaseInput, buttonId: 'lowercase-add' },

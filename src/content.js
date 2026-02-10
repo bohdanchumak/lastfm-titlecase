@@ -16,10 +16,11 @@ let lowercaseWords = new Set(DEFAULT_LOWERCASE);
 let uppercaseWords = new Set(DEFAULT_UPPERCASE);
 let capitalizedWords = new Set();
 let titleReplacements = [];
+let sentenceCaseEnabled = true;
 
 async function loadSettings() {
 	return new Promise((resolve) => {
-		storage.sync.get(['lowercaseWords', 'uppercaseWords', 'capitalizedWords', 'titleReplacements'], (result) => {
+		storage.sync.get(['lowercaseWords', 'uppercaseWords', 'capitalizedWords', 'titleReplacements', 'sentenceCaseEnabled'], (result) => {
 			if (result.lowercaseWords)
 				lowercaseWords = new Set(result.lowercaseWords);
 
@@ -31,6 +32,9 @@ async function loadSettings() {
 
 			if (result.titleReplacements)
 				titleReplacements = result.titleReplacements;
+
+			if (result.sentenceCaseEnabled !== undefined)
+				sentenceCaseEnabled = result.sentenceCaseEnabled;
 
 			resolve();
 		});
@@ -114,7 +118,7 @@ function processElement(el) {
 		return;
 	}
 
-	const isSentenceCase = sentenceCaseRegex.test(text);
+	const isSentenceCase = sentenceCaseEnabled && sentenceCaseRegex.test(text);
 
 	let fixed = isSentenceCase
 		? toSentenceCase(text)
