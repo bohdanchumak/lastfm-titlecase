@@ -89,7 +89,7 @@ const capitalizeAfter = (pattern) => (text) =>
 	text.replace(pattern, (_, prefix, letter) => prefix + letter.toUpperCase());
 
 const capitalizeAfterDot = capitalizeAfter(/(\.\s+)(\p{L})/gu);
-const capitalizeAfterPunctuation = capitalizeAfter(/(-|\/|=|"|(?<!\p{L})'(?!(?:ll|ve|re|em)\b)|[(\[{]\s*)(\p{L})/gu);
+const capitalizeAfterPunctuation = capitalizeAfter(/(-|\/|=|"|(?<!\p{L})'(?!(?:ll|ve|re|em)\b)|(?<=\s|^)[(\[{]\s*)(\p{L})/gu);
 
 function capitalizeMusicalKeys(text) {
 	return text.replace(/\ba(?=(?:[\s-](?:sharp|flat))?[\s-](?:major|minor)\b)/gi, 'A');
