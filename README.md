@@ -14,28 +14,52 @@ The extension consists of two parts: automatic corrections that work out of the 
 
 The extension automatically applies the following rules to all song, album, and artist names:
 
-- converts English text to title case with smart handling of common words (a, the, of, etc.)
-- converts non-English text to sentence case (first letter uppercase, rest lowercase)
-- uppercases Roman numerals (I, II, III, IV, etc.)
-- uppercases letter-dot acronyms (U.S.A., etc.)
-- capitalizes musical keys (A Flat Major, A Sharp Minor, etc.)
-- capitalizes the first letter after opening brackets and dots
+- converts English text to title case with smart handling of common words
+- converts non-English text to sentence case
+
+> **Note:** Non-English language detection works by looking for non-Latin characters (Cyrillic, accented letters, etc.). This means it reliably detects languages like Ukrainian, but may not detect languages that use the basic Latin alphabet without diacritics. In those cases, title case will be applied instead of sentence case. You can disable sentence case entirely in the settings, or use the Replacements section to fix specific titles.
+
+- uppercases Roman numerals
+- uppercases letter-dot acronyms (U.F.O., etc.)
+- capitalizes musical keys (A Flat Major, etc.)
+- capitalizes words after hyphens, slashes, dots, opening brackets, opening quotes, and equals signs
 
 ## Configuration
 
-Click the extension icon to open the configuration page. There are three word lists you can customize to fine-tune the automatic corrections:
+Click the extension icon to open the configuration page. There are five sections you can customize:
 
-![Configuration](screenshots/config.png)
+- **Settings**: toggle sentence case for non-English titles on or off
 
-- **Lowercase Words** — words that remain lowercase in titles (except at the start or end), e.g., "a", "the", "of"
-- **Uppercase Words** — words that are always fully capitalized, e.g., "DJ", "EP", "UK"
-- **Capitalized Words** — words that always have the first letter capitalized (useful for non-English titles where sentence case is applied)
+![Settings](screenshots/settings.png)
+
+- **Lowercase Words**: words that remain lowercase in titles (except at the start or end), e.g., "a", "the", "of"
+
+![Lowercase Words](screenshots/lowercase.png)
+
+- **Uppercase Words**: words that are always fully capitalized, e.g., "DJ", "EP", "UK"
+
+![Uppercase Words](screenshots/uppercase.png)
+
+- **Capitalized Words**: words that always have the first letter capitalized
+
+![Capitalized Words](screenshots/capitalization.png)
+
+- **Replacements**: map words or titles to exact custom casing. Single words (e.g., "mcdonalds" → "McDonalds") are replaced wherever they appear. Multi-word phrases (e.g., "hey what" → "HEY WHAT") replace the entire title when matched.
+
+![Replacements](screenshots/replacements.png)
+
+You can also right-click any title on last.fm and select "Add to replacements" to quickly pre-fill the original title on the configuration page.
+
+## Installation
+
+- [Chrome Web Store](https://chromewebstore.google.com/detail/lastfm-title-case/bfddnfmcefjaabnfccnjeaankmcfdkeo)
+- [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/last-fm-title-case/)
+- [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/lastfm-title-case/bkbokhdaolmlgedpdnjmilagkbjeflpp)
 
 ## Building from Source
 
 ### Requirements
 
-- **OS:** Windows, macOS, or Linux
 - **Node.js:** v18.0.0 or higher
 - **npm:** v9.0.0 or higher (included with Node.js)
 
@@ -55,9 +79,8 @@ Click the extension icon to open the configuration page. There are three word li
    npm run build
    ```
 
-This runs esbuild to bundle source files with their dependencies into the `dist/` directory.
+### Loading the Unpacked Extension
 
-### Loading the Extension
-
-- **Chrome/Edge:** Go to `chrome://extensions` or `edge://extensions`, enable "Developer mode", click "Load unpacked", and select the project folder
+- **Chrome:** Go to `chrome://extensions`, enable "Developer mode", click "Load unpacked", and select the project folder
+- **Edge:** Go to `edge://extensions`, enable "Developer mode", click "Load unpacked", and select the project folder
 - **Firefox:** Go to `about:debugging#/runtime/this-firefox`, click "Load Temporary Add-on", and select `manifest.json`
