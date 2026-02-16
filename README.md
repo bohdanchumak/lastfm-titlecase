@@ -1,5 +1,11 @@
 A browser extension that fixes song, album, and artist name casing on last.fm.
 
+## Installation
+
+- [Google Chrome](https://chromewebstore.google.com/detail/lastfm-title-case/bfddnfmcefjaabnfccnjeaankmcfdkeo)
+- [Mozilla Firefox](https://addons.mozilla.org/en-US/firefox/addon/last-fm-title-case/)
+- [Microsoft Edge](https://microsoftedge.microsoft.com/addons/detail/lastfm-title-case/bkbokhdaolmlgedpdnjmilagkbjeflpp)
+
 ## Why?
 
 Last.fm displays track, album, and artist names/titles exactly as they were scrobbled, which often results in inconsistent and ugly casing like "ALL CAPS TITLE" or "all lowercase title". This extension aims to automatically convert them to proper title case (or sentence case for non-English languages).
@@ -32,11 +38,11 @@ Click the extension icon to open the configuration page. There are five sections
 
 ![Settings](img/screenshots/settings.png)
 
-- **Lowercase Words**: words that remain lowercase in titles (except at the start or end), e.g., "a", "the", "of"
+- **Lowercase Words**: words that remain lowercase in titles (except at the start or end)
 
 ![Lowercase Words](img/screenshots/lowercase.png)
 
-- **Uppercase Words**: words that are always fully capitalized, e.g., "DJ", "EP", "UK"
+- **Uppercase Words**: words that are always fully capitalized
 
 ![Uppercase Words](img/screenshots/uppercase.png)
 
@@ -50,18 +56,7 @@ Click the extension icon to open the configuration page. There are five sections
 
 You can also right-click any title on last.fm and select "Add to replacements" to quickly pre-fill the original title on the configuration page.
 
-## Installation
-
-- [Chrome Web Store](https://chromewebstore.google.com/detail/lastfm-title-case/bfddnfmcefjaabnfccnjeaankmcfdkeo)
-- [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/last-fm-title-case/)
-- [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/lastfm-title-case/bkbokhdaolmlgedpdnjmilagkbjeflpp)
-
 ## Building from Source
-
-### Requirements
-
-- **Node.js:** v18.0.0 or higher
-- **npm:** v9.0.0 or higher (included with Node.js)
 
 ### Build Instructions
 
@@ -82,5 +77,5 @@ You can also right-click any title on last.fm and select "Add to replacements" t
 ### Loading the Unpacked Extension
 
 - **Chrome:** Go to `chrome://extensions`, enable "Developer mode", click "Load unpacked", and select the project folder
-- **Edge:** Go to `edge://extensions`, enable "Developer mode", click "Load unpacked", and select the project folder
 - **Firefox:** Go to `about:debugging#/runtime/this-firefox`, click "Load Temporary Add-on", and select `manifest.json`
+- **Edge:** Go to `edge://extensions`, enable "Developer mode", click "Load unpacked", and select the project folder
