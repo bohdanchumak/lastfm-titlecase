@@ -6,7 +6,7 @@ Last.fm displays track, album, and artist names/titles exactly as they were scro
 
 | Before | After |
 |--------|-------|
-| ![Before](screenshots/before.png) | ![After](screenshots/after.png) |
+| ![Before](img/screenshots/before.png) | ![After](img/screenshots/after.png) |
 
 The extension consists of two parts: automatic corrections that work out of the box, and a configuration page that lets you fine-tune the results.
 
@@ -30,23 +30,23 @@ Click the extension icon to open the configuration page. There are five sections
 
 - **Settings**: toggle sentence case for non-English titles on or off
 
-![Settings](screenshots/settings.png)
+![Settings](img/screenshots/settings.png)
 
 - **Lowercase Words**: words that remain lowercase in titles (except at the start or end), e.g., "a", "the", "of"
 
-![Lowercase Words](screenshots/lowercase.png)
+![Lowercase Words](img/screenshots/lowercase.png)
 
 - **Uppercase Words**: words that are always fully capitalized, e.g., "DJ", "EP", "UK"
 
-![Uppercase Words](screenshots/uppercase.png)
+![Uppercase Words](img/screenshots/uppercase.png)
 
 - **Capitalized Words**: words that always have the first letter capitalized
 
-![Capitalized Words](screenshots/capitalization.png)
+![Capitalized Words](img/screenshots/capitalization.png)
 
 - **Replacements**: map words or titles to exact custom casing. Single words (e.g., "mcdonalds" → "McDonalds") are replaced wherever they appear. Multi-word phrases (e.g., "hey what" → "HEY WHAT") replace the entire title when matched.
 
-![Replacements](screenshots/replacements.png)
+![Replacements](img/screenshots/replacements.png)
 
 You can also right-click any title on last.fm and select "Add to replacements" to quickly pre-fill the original title on the configuration page.
 
