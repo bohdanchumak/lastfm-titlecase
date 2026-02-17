@@ -4,9 +4,9 @@ import os
 
 
 files = [
-	"icons/icon16.png",
-	"icons/icon48.png",
-	"icons/icon128.png",
+	"img/icons/icon16.png",
+	"img/icons/icon48.png",
+	"img/icons/icon128.png",
 	"dist/config.js",
 	"dist/content.js",
 	"src/background.js",
