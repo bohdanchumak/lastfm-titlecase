@@ -198,6 +198,66 @@ function createChip(word, onRemove) {
 	return chip;
 }
 
+function exportConfig() {
+	const json = JSON.stringify(state, null, 2);
+	const blob = new Blob([json], { type: 'application/json' });
+	const url = URL.createObjectURL(blob);
+	const a = document.createElement('a');
+
+	a.href = url;
+	a.download = 'lastfm-titlecase-config.json';
+	a.click();
+	URL.revokeObjectURL(url);
+}
+
+function importConfig(file) {
+	const reader = new FileReader();
+
+	reader.onload = (e) => {
+		try {
+			const data = JSON.parse(e.target.result);
+			const updates = {};
+
+			if (typeof data.sentenceCaseEnabled === 'boolean')
+				updates.sentenceCaseEnabled = data.sentenceCaseEnabled;
+
+			if (Array.isArray(data.lowercaseWords))
+				updates.lowercaseWords = data.lowercaseWords.filter(w => typeof w === 'string');
+
+			if (Array.isArray(data.uppercaseWords))
+				updates.uppercaseWords = data.uppercaseWords.filter(w => typeof w === 'string');
+
+			if (Array.isArray(data.capitalizedWords))
+				updates.capitalizedWords = data.capitalizedWords.filter(w => typeof w === 'string');
+
+			if (Array.isArray(data.titleReplacements))
+				updates.titleReplacements = data.titleReplacements.filter(r =>
+					r && typeof r.from === 'string' && typeof r.to === 'string'
+				);
+
+			if (Object.keys(updates).length === 0)
+				return alert('No valid configuration data found in file');
+
+			setState(updates);
+		} catch {
+			alert('Invalid JSON file');
+		}
+	};
+
+	reader.readAsText(file);
+}
+
+document.getElementById('export-config').addEventListener('click', exportConfig);
+
+const importFileInput = document.getElementById('import-file');
+document.getElementById('import-config').addEventListener('click', () => importFileInput.click());
+importFileInput.addEventListener('change', () => {
+	if (importFileInput.files[0])
+		importConfig(importFileInput.files[0]);
+
+	importFileInput.value = '';
+});
+
 saveButton.addEventListener('click', saveToStorage);
 
 sentenceCaseToggle.addEventListener('change', () => {

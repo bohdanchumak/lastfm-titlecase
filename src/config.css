@@ -207,6 +207,27 @@ button {
 	}
 }
 
+.config-actions {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	margin-top: 12px;
+
+	.config-action {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		button {
+			min-width: 80px;
+		}
+
+		& input[type="file"] {
+			display: none;
+		}
+	}
+}
+
 .save-button {
 	position: fixed;
 	right: 20px;

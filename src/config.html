@@ -17,6 +17,17 @@
 			<span class="toggle-slider"></span>
 		</label>
 		<p>(When disabled, title case is applied to all titles regardless of language)</p>
+		<div class="config-actions">
+			<div class="config-action">
+				Export current configuration
+				<button type="button" id="export-config">Export</button>
+			</div>
+			<div class="config-action">
+				Import configuration from file
+				<button type="button" id="import-config">Import</button>
+				<input type="file" id="import-file" accept=".json">
+			</div>
+		</div>
 	</details>
 
 	<details class="section lowercase">
