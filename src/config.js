@@ -1,4 +1,4 @@
-import {DEFAULT_LOWERCASE, DEFAULT_UPPERCASE} from './defaults.js';
+import DEFAULTS from './defaults.json';
 
 const storage = typeof browser !== 'undefined' ? browser.storage : chrome.storage;
 const lowercaseSection = document.querySelector('.section.lowercase');
@@ -14,13 +14,7 @@ const replacementToInput = document.getElementById('replacement-to');
 const sentenceCaseToggle = document.getElementById('sentence-case-toggle');
 const saveButton = document.getElementById('save-button');
 
-let state = {
-	sentenceCaseEnabled: true,
-	lowercaseWords: [...DEFAULT_LOWERCASE],
-	uppercaseWords: [...DEFAULT_UPPERCASE],
-	capitalizedWords: [],
-	titleReplacements: []
-};
+let state = { ...DEFAULTS };
 
 let savedState = null;
 
@@ -79,11 +73,11 @@ function loadFromStorage() {
 	return new Promise((resolve) => {
 		storage.sync.get(['sentenceCaseEnabled', 'lowercaseWords', 'uppercaseWords', 'capitalizedWords', 'titleReplacements'], (result) => {
 			setState({
-				sentenceCaseEnabled: result.sentenceCaseEnabled !== undefined ? result.sentenceCaseEnabled : true,
-				lowercaseWords: result.lowercaseWords || [...DEFAULT_LOWERCASE],
-				uppercaseWords: result.uppercaseWords || [...DEFAULT_UPPERCASE],
-				capitalizedWords: result.capitalizedWords || [],
-				titleReplacements: result.titleReplacements || []
+				sentenceCaseEnabled: result.sentenceCaseEnabled !== undefined ? result.sentenceCaseEnabled : DEFAULTS.sentenceCaseEnabled,
+				lowercaseWords: result.lowercaseWords || [...DEFAULTS.lowercaseWords],
+				uppercaseWords: result.uppercaseWords || [...DEFAULTS.uppercaseWords],
+				capitalizedWords: result.capitalizedWords || [...DEFAULTS.capitalizedWords],
+				titleReplacements: result.titleReplacements || [...DEFAULTS.titleReplacements]
 			});
 
 			savedState = JSON.parse(JSON.stringify(state));

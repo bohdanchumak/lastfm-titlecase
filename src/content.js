@@ -1,4 +1,4 @@
-import {DEFAULT_LOWERCASE, DEFAULT_UPPERCASE} from './defaults.js';
+import DEFAULTS from './defaults.json';
 
 const storage = typeof browser !== 'undefined' ? browser.storage : chrome.storage;
 
@@ -12,8 +12,8 @@ const TITLE_SELECTORS = [
 	'.chartlist-name a'
 ].join(', ');
 
-let lowercaseWords = new Set(DEFAULT_LOWERCASE);
-let uppercaseWords = new Set(DEFAULT_UPPERCASE);
+let lowercaseWords = new Set(DEFAULTS.lowercaseWords);
+let uppercaseWords = new Set(DEFAULTS.uppercaseWords);
 let capitalizedWords = new Set();
 let titleReplacements = [];
 let sentenceCaseEnabled = true;

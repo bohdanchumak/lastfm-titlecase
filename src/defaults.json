@@ -1,0 +1,7 @@
+{
+	"sentenceCaseEnabled": true,
+	"lowercaseWords": ["a", "aka", "an", "and", "as", "at", "by", "de", "en", "feat", "for", "ft", "in", "nor", "of", "on", "or", "per", "the", "to", "via", "vs"],
+	"uppercaseWords": ["dj", "ep", "lp", "tv", "uk", "usa", "ufo", "nyc", "ok"],
+	"capitalizedWords": [],
+	"titleReplacements": []
+}
