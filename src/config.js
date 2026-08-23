@@ -1,6 +1,8 @@
 import DEFAULTS from './defaults.json';
 
+const MAX_LENGTH = 100;
 const storage = typeof browser !== 'undefined' ? browser.storage : chrome.storage;
+const runtime = typeof browser !== 'undefined' ? browser.runtime : chrome.runtime;
 const lowercaseSection = document.querySelector('.section.lowercase');
 const uppercaseSection = document.querySelector('.section.uppercase');
 const capitalizedSection = document.querySelector('.section.capitalized');
@@ -54,6 +56,17 @@ function saveToStorage() {
 		capitalizedWords: state.capitalizedWords,
 		titleReplacements: state.titleReplacements
 	}, () => {
+		if (runtime.lastError) {
+			saveButton.textContent = 'Failed';
+			saveButton.classList.add('failed');
+			setTimeout(() => {
+				saveButton.textContent = 'Save';
+				saveButton.classList.remove('failed');
+			}, 3000);
+
+			return;
+		}
+
 		savedState = JSON.parse(JSON.stringify(state));
 
 		for (const section of Object.values(sectionByKey))
@@ -86,30 +99,12 @@ function loadFromStorage() {
 	});
 }
 
-function validateWord(word) {
-	if (word.length > 50) 
-		return 'Word is too long (max 50 characters)';
-
-	if (/:\/\//.test(word) || /^www\./i.test(word))
-		return 'URLs are not allowed';
-
-	if (/<[^>]*>/.test(word))
-		return 'HTML tags are not allowed';
-
-	return null;
-}
-
 function addWord(type, word) {
 	const key = type + 'Words';
 	const normalized = word.trim().toLowerCase();
 
-	if (!normalized)
+	if (!normalized || normalized.length > MAX_LENGTH)
 		return;
-
-	const error = validateWord(normalized);
-
-	if (error)
-		return alert(error);
 
 	if (!state[key].includes(normalized))
 		setState({ [key]: [...state[key], normalized] });
@@ -125,17 +120,8 @@ function addReplacement(from, to) {
 	from = from.trim();
 	to = to.trim();
 
-	if (!from || !to)
+	if (!from || !to || from.length > MAX_LENGTH || to.length > MAX_LENGTH)
 		return;
-
-	const fromError = validateWord(from);
-	const toError = validateWord(to);
-
-	if (fromError)
-		return alert(fromError);
-
-	if (toError)
-		return alert(toError);
 
 	if (state.titleReplacements.some(r => r.from.toLowerCase() === from.toLowerCase()))
 		return;
@@ -210,6 +196,10 @@ function exportConfig() {
 	URL.revokeObjectURL(url);
 }
 
+function isValidWord(word) {
+	return typeof word === 'string' && word.length <= MAX_LENGTH;
+}
+
 function importConfig(file) {
 	const reader = new FileReader();
 
@@ -222,17 +212,17 @@ function importConfig(file) {
 				updates.sentenceCaseEnabled = data.sentenceCaseEnabled;
 
 			if (Array.isArray(data.lowercaseWords))
-				updates.lowercaseWords = data.lowercaseWords.filter(w => typeof w === 'string');
+				updates.lowercaseWords = data.lowercaseWords.filter(isValidWord);
 
 			if (Array.isArray(data.uppercaseWords))
-				updates.uppercaseWords = data.uppercaseWords.filter(w => typeof w === 'string');
+				updates.uppercaseWords = data.uppercaseWords.filter(isValidWord);
 
 			if (Array.isArray(data.capitalizedWords))
-				updates.capitalizedWords = data.capitalizedWords.filter(w => typeof w === 'string');
+				updates.capitalizedWords = data.capitalizedWords.filter(isValidWord);
 
 			if (Array.isArray(data.titleReplacements))
 				updates.titleReplacements = data.titleReplacements.filter(r =>
-					r && typeof r.from === 'string' && typeof r.to === 'string'
+					r && isValidWord(r.from) && isValidWord(r.to)
 				);
 
 			if (Object.keys(updates).length === 0)

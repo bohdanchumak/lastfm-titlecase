@@ -251,4 +251,9 @@ button {
 	&.saved {
 		background: #2e7d32;
 	}
+
+	&.failed {
+		background: var(--color-accent);
+		pointer-events: auto;
+	}
 }
